@@ -1,0 +1,61 @@
+{
+    "root":[{
+        "name": "Rel-100000",
+        "children" :[
+            {
+                "accno": "0013HxqHJAAY",
+                "children": [
+                    {
+                        "accno": "0013HxxHhAAJ",
+                        "ownership_percentage": "50",
+                        "stage": "customer",
+                        "association": "influences",
+                        "state": "NYC"
+                    },
+                    {
+                        "accno": "0013Hxkn5AAB",
+                        "ownership_percentage": "50",
+                        "stage": "prospect",
+                        "association": "influences",
+                        "state": "MaryLand"
+                    },
+                    {
+                        "accno": "0013HxrLgAAJ",
+                        "ownership_percentage": "50",
+                        "stage": "applicant",
+                        "association": "test",
+                        "state": "NYC"
+                    }
+                ]
+
+            },
+            {
+                "accountno": "0013HyGKZAA2",
+                "children": [
+                    {
+                        "accountno": "0013Hy2ydAAB",
+                        "ownership_percentage": "10",
+                        "stage": "customer",
+                        "association": "influences",
+                        "state": "MaryLand"
+                    },
+                    {
+                        "accountno": "0013HybfrAAB",
+                        "ownership_percentage": "10",
+                        "stage": "prospect",
+                        "association": "influences",
+                        "state": "NYC"
+                    },
+                    {
+                        "accno": "0013HyMu7AAF",
+                        "ownership_percentage": "10",
+                        "stage": "customer",
+                        "association": "test",
+                        "state": "Virginia"
+                    }
+                ]
+
+            }
+        ]
+    }]
+}

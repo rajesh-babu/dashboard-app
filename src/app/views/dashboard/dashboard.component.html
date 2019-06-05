@@ -1,0 +1,37 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-sm-6 col-lg-4">
+      <div class="card text-white bg-info">
+        <div class="card-body pb-0">
+
+          <div class="text-value"><i class="fa fa-bar-chart" aria-hidden="true"></i> - Stage</div>
+        </div>
+        <div class="chart-wrapper mt-3 mx-3" >
+          <app-chart *ngIf="stageChartData" [data]="stageChartData" [chartColors]="stageChartColors"></app-chart>
+        </div>
+      </div>
+    </div><!--/.col-->
+    <div class="col-sm-6 col-lg-4">
+      <div class="card text-white bg-primary">
+        <div class="card-body pb-0">
+          <div class="text-value"><i class="fa fa-bar-chart" aria-hidden="true"></i> - Association</div>
+        </div>
+        <div class="chart-wrapper mt-3 mx-3" >
+            <app-chart *ngIf="assoChartData" [data]="assoChartData" [chartColors]="assoChartColors"></app-chart>
+          </div>
+      </div>
+    </div><!--/.col-->
+    <div class="col-sm-6 col-lg-4">
+      <div class="card text-white bg-warning">
+        <div class="card-body pb-0">
+          <div class="text-value"><i class="fa fa-bar-chart" aria-hidden="true"></i> - State</div>
+        </div>
+        <div class="chart-wrapper mt-3 mx-3" >
+            <app-chart *ngIf="stateChartData" [data]="stateChartData" [chartColors]="stateChartColors"></app-chart>
+          </div>
+      </div>
+    </div><!--/.col-->
+  </div><!--/.row-->
+  <app-table></app-table>
+  
+</div>
