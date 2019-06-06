@@ -1,6 +1,7 @@
 import { Component, OnInit, OnChanges, ViewChild, ElementRef, Input, ViewEncapsulation } from '@angular/core';
 
 import * as d3 from 'd3';
+import { ChartsService } from '../../services/charts.service';
 
 @Component({
   selector: 'app-chart',
@@ -23,11 +24,13 @@ export class ChartComponent implements OnInit, OnChanges {
   private yAxis: any;
   private formatxAxis = d3.format('d');
   private maxValue: number;
+  private chartFieldMap: any;
 
-  constructor() { }
+  constructor(private chartService: ChartsService) { }
 
   ngOnInit() {
     this.maxValue = this.data.maxValue;
+    this.chartFieldMap = this.data.chartFieldMap;
     this.data = this.data.dataArr;
     this.createChart();
     if (this.data) {
@@ -68,6 +71,7 @@ export class ChartComponent implements OnInit, OnChanges {
     // x & y axis
     this.xAxis = svg.append('g')
       .attr('class', 'axis axis-x')
+      .style('font-size', 12)
       .attr('transform', `translate(${this.margin.left}, ${this.margin.top + this.height})`)
       .call(d3.axisBottom(this.xScale));
     this.yAxis = svg.append('g')
@@ -75,11 +79,11 @@ export class ChartComponent implements OnInit, OnChanges {
       .attr('transform', `translate(${this.margin.left}, ${this.margin.top})`)
       .call(d3.axisLeft(this.yScale)
       .tickFormat(this.formatxAxis)
-      .tickValues(d3.range(0, this.maxValue))
-      );
+      .tickValues(d3.range(0, this.maxValue)))
   }
 
   updateChart() {
+    const _that = this
     // update scales & axis
     this.xScale.domain(this.data.map(d => d[0]));
     this.yScale.domain([0, d3.max(this.data, d => d[1])]);
@@ -91,7 +95,8 @@ export class ChartComponent implements OnInit, OnChanges {
     );
 
     let update = this.chart.selectAll('.bar')
-      .data(this.data);
+      .data(this.data)
+
 
     // remove exiting bars
     update.exit().remove();
@@ -109,14 +114,24 @@ export class ChartComponent implements OnInit, OnChanges {
       .enter()
       .append('rect')
       .attr('class', 'bar')
+      .attr('field-name', d => d[0])
+      .attr('chart-field-map', this.chartFieldMap)
       .attr('x', d => this.xScale(d[0]))
       .attr('y', d => this.yScale(0))
       .attr('width', this.xScale.bandwidth())
       .attr('height', 0)
       .style('fill', (d, i) => this.colors(i))
+      .style('cursor', 'pointer')
       .transition()
       .delay((d, i) => i * 10)
       .attr('y', d => this.yScale(d[1]))
-      .attr('height', d => this.height - this.yScale(d[1]));
+      .attr('height', d => this.height - this.yScale(d[1]))
+    
+      this.chart.selectAll('.bar')
+        .on("click", function(d, i) {
+          console.log("fieldName:" + this.getAttribute('field-name'))
+          console.log("ChartfieldMap:" + this.getAttribute('chart-field-map'))
+          _that.chartService.filterTable(this.getAttribute('field-name'));
+      });      
   }
 }

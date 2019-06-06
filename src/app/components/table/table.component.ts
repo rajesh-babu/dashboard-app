@@ -1,6 +1,8 @@
 
-import {Component, ViewChild} from '@angular/core';
+import {Component, ViewChild, Input, OnInit} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import { IfStmt, debugOutputAstAsTypeScript } from '@angular/compiler';
+import { ChartsService } from '../../services/charts.service';
 
 /**
  * @title Data table with sorting, pagination, and filtering.
@@ -10,20 +12,38 @@ import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })
-export class TableComponent {
-  displayedColumns = ['id', 'name', 'progress', 'color'];
-  dataSource: MatTableDataSource<UserData>;
+export class TableComponent implements OnInit {
+  displayedColumns = ['parent_acc_no', 'child_acc_no', 'percentage', 'stage', 'association', 'state'];
+  dataSource: MatTableDataSource<DashboardData>;
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @Input() private mainChartData: any;
 
-  constructor() {
-    // Create 100 users
-    const users: UserData[] = [];
-    for (let i = 1; i <= 100; i++) { users.push(createNewUser(i)); }
-
-    // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource(users);
+  constructor(private chartService: ChartsService) {
+  }
+  ngOnInit(){
+    const dashboardDataArr: DashboardData[] = [];
+    if(this.mainChartData) {
+      for(let i=0;i<this.mainChartData['root'].length;i++){
+        for(let j=0;j<this.mainChartData['root'][i].children.length;j++){
+          //const parent_acc_obj = { parent_acc_no: this.mainChartData['root'][i].children[j]['accno']};
+          //const child_acc_obj = { child_acc_no: this.mainChartData['root'][i].children[j]['accno']};
+          //const rel_obj = { rel_name: this.mainChartData['root'][i]['name'] };
+          //dashboardDataArr.push(createRow({...this.mainChartData['root'][i].children[j], ...parent_acc_obj, ...child_acc_obj, ...rel_obj}));
+          for(let k=0;k<this.mainChartData['root'][i].children[j].children.length;k++){
+            const parent_acc_obj = { parent_acc_no: this.mainChartData['root'][i].children[j]['accno']};
+            const child_acc_obj = { child_acc_no: this.mainChartData['root'][i].children[j].children[k]['accno']};
+            const rel_obj = { rel_name: this.mainChartData['root'][i]['name'] };
+            dashboardDataArr.push(createRow({...this.mainChartData['root'][i].children[j].children[k], ...parent_acc_obj, ...child_acc_obj, ...rel_obj}));
+          }
+        }
+      }
+      this.dataSource = new MatTableDataSource(dashboardDataArr);
+    }
+    this.chartService.change.subscribe((filterText: any) => {
+      this.applyFilter(filterText);
+    })
   }
 
   /**
@@ -31,7 +51,9 @@ export class TableComponent {
    * be able to query its view for the initialized paginator and sort.
    */
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+    if(this.paginator){
+      this.dataSource.paginator = this.paginator;
+    }
     this.dataSource.sort = this.sort;
   }
 
@@ -43,34 +65,24 @@ export class TableComponent {
 }
 
 /** Builds and returns a new User. */
-function createNewUser(id: number): UserData {
-  const name =
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
-
+function createRow(data: any): DashboardData {
   return {
-    id: id.toString(),
-    name: name,
-    progress: Math.round(Math.random() * 100).toString(),
-    color: COLORS[Math.round(Math.random() * (COLORS.length - 1))]
+    rel_name: data.rel_name,
+    parent_acc_no: data.parent_acc_no,
+    child_acc_no: data.child_acc_no,
+    percentage: data.ownership_percentage,
+    stage: data.stage,
+    association: data.association,
+    state: data.state
   };
 }
 
-/** Constants used to fill up our data base. */
-const COLORS = ['maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple',
-  'fuchsia', 'lime', 'teal', 'aqua', 'blue', 'navy', 'black', 'gray'];
-const NAMES = ['Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack',
-  'Charlotte', 'Theodore', 'Isla', 'Oliver', 'Isabella', 'Jasper',
-  'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'];
-
-export interface UserData {
-  id: string;
-  name: string;
-  progress: string;
-  color: string;
+export interface DashboardData {
+  rel_name: string;
+  parent_acc_no: string;
+  child_acc_no: string;
+  percentage: number,
+  stage: string;
+  association: string;
+  state: string;
 }
-
-
-/**  Copyright 2018 Google Inc. All Rights Reserved.
-    Use of this source code is governed by an MIT-style license that
-    can be found in the LICENSE file at http://angular.io/license */

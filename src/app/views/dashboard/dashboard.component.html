@@ -1,7 +1,7 @@
 <div class="animated fadeIn">
   <div class="row">
     <div class="col-sm-6 col-lg-4">
-      <div class="card text-white bg-info">
+      <div class="card text-white bg-info" style="background-color: #636bde !important;">
         <div class="card-body pb-0">
 
           <div class="text-value"><i class="fa fa-bar-chart" aria-hidden="true"></i> - Stage</div>
@@ -32,6 +32,6 @@
       </div>
     </div><!--/.col-->
   </div><!--/.row-->
-  <app-table></app-table>
+  <app-table *ngIf="mainChartData" [mainChartData]="mainChartData"></app-table>
   
 </div>

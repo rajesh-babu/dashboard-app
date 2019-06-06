@@ -1,41 +1,62 @@
 <div class="example-header">
-
-      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search" style="width: 250px; BORDER-BOTTOM: 1px #9e9e9e solid;">
-  </div>
+    <mat-form-field>
+        <label style="margin-bottom: 0">Search: </label>
+      <input matInput (keyup)="applyFilter($event.target.value)"  style="width: 250px; BORDER-BOTTOM: 1px #9e9e9e solid;">
+      <button (click)="applyFilter('')">Reset</button>
+    </mat-form-field>
+    </div>
   
   <div class="example-container mat-elevation-z8">
   
     <mat-table [dataSource]="dataSource" matSort>
   
-      <!-- ID Column -->
-      <ng-container matColumnDef="id">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+      <!-- rel_name Column 
+      <ng-container matColumnDef="rel_name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Name</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.rel_name}} </mat-cell>
+      </ng-container>-->
+  
+      <!-- parent_acc_no Column -->
+      <ng-container matColumnDef="parent_acc_no">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Parent Acc No </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.parent_acc_no}} </mat-cell>
       </ng-container>
   
-      <!-- Progress Column -->
-      <ng-container matColumnDef="progress">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Progress </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.progress}}% </mat-cell>
+      <!-- child_acc_no Column -->
+      <ng-container matColumnDef="child_acc_no">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Child Acc No </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.child_acc_no}} </mat-cell>
       </ng-container>
   
-      <!-- Name Column -->
-      <ng-container matColumnDef="name">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
+      <!-- Stage Column -->
+      <ng-container matColumnDef="stage">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Stage </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.stage}} </mat-cell>
       </ng-container>
-  
-      <!-- Color Column -->
-      <ng-container matColumnDef="color">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Color </mat-header-cell>
-        <mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </mat-cell>
-      </ng-container>
+
+       <!-- association Column -->
+       <ng-container matColumnDef="association">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Association </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.association}} </mat-cell>
+        </ng-container>
+
+        <!-- Percentage Column -->
+       <ng-container matColumnDef="percentage">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Percentage </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.percentage}} </mat-cell>
+        </ng-container>
+
+         <!-- state Column -->
+      <ng-container matColumnDef="state">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> State </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.state}} </mat-cell>
+        </ng-container>
   
       <mat-header-row *matHeaderRowDef="displayedColumns" style="border-color: #c3c3c3;font-weight: 600;"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;" style="border-color: #c3c3c3;">
       </mat-row>
     </mat-table>
   
-    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    <mat-paginator [pageSize]= "5" ></mat-paginator> <!-- [pageSizeOptions]="[5, 10, 25, 100]" -->
   </div>
   

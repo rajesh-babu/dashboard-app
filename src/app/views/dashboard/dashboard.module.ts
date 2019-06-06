@@ -13,6 +13,7 @@ import { TableComponent } from '../../components/table/table.component';
 import { ReactiveFormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {CdkTableModule} from '@angular/cdk/table';
+import { ChartsService } from '../../services/charts.service'
 import {
   MatAutocompleteModule,
   MatButtonModule,
@@ -96,6 +97,7 @@ export class DemoMaterialModule {}
     ReactiveFormsModule,
     DemoMaterialModule
   ],
-  declarations: [ DashboardComponent, ChartComponent, TableComponent ]
+  declarations: [ DashboardComponent, ChartComponent, TableComponent ],
+  providers:[ChartsService]
 })
 export class DashboardModule { }
